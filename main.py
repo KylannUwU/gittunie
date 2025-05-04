@@ -44,7 +44,7 @@ def get_plan():
 
     # Crear la parte dinámica del mensaje
     dynamic_part = " ➜ ".join(parts) + " ➜ " if parts else ""
-    return f"Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls  @{user}"
+    return f" nephuPats Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls  @{user}"
 
 # Inicia Flask
 if __name__ == "__main__":
