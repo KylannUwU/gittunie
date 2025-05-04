@@ -7,7 +7,7 @@ plans = []  # Lista dinámica de planes
 # Ruta para agregar un plan
 @app.route("/addplan")
 def add_plan():
-    new_plan = request.args.get("plan", "").upper()  # Obtiene el nuevo plan
+    new_plan = request.args.get("plan", "")  # Obtiene el nuevo plan
     if new_plan:
         plans.append(new_plan)  # Lo agrega al final de la lista
     return "Plan añadido."
