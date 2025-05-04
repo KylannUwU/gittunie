@@ -33,10 +33,10 @@ def get_plan():
 
     parts = []  # Lista para almacenar las partes del mensaje de los planes
 
-    # Añadir los planes anteriores con la palomita [ ✔️ ]
+    # Añadir los planes anteriores con la palomita [✓]
     if len(plans) > 1:
         for plan in plans[:-1]:  # Excluye el último plan
-            parts.append(f"{plan} [ ✔️  ]")
+            parts.append(f"{plan} [✓]")
     
     # Añadir el último plan con [En pantalla]
     if len(plans) > 0:
