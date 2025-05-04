@@ -1,6 +1,4 @@
 from flask import Flask, request
-from pyngrok import ngrok
-import os
 
 app = Flask(__name__)
 
@@ -47,11 +45,6 @@ def get_plan():
     # Crear la parte dinámica del mensaje
     dynamic_part = " ➜ ".join(parts) + " ➜ " if parts else ""
     return f"Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls  @{user}"
-
-
-# Inicializa ngrok y expone el puerto 5000 de Flask
-public_url = ngrok.connect(5000)
-print(f"Flask está corriendo en: {public_url}")  # Muestra la URL pública de ngrok
 
 # Inicia Flask
 if __name__ == "__main__":
