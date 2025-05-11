@@ -81,7 +81,7 @@ def remove_call():
     
     # Si no quedan participantes, agregar el valor predeterminado
     if not call_participants:
-        return f"{DEFAULT_CALL['name']} {DEFAULT_CALL['emote']}" 
+        return f"{DEFAULT_CALL['name']} {DEFAULT_CALL['emote']} " 
     
     if removed:
         return f"Participantes removidos: {' , ' .join(removed)} "
