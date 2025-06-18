@@ -43,7 +43,7 @@ def reset_plan():
 def remove_specific_plans():
     global current_plan_index
 
-    plans_to_remove_raw = request.args.get("plan", "")
+    plans_to_remove_raw = request.args.get("plan", "").replace("+", " ").replace("%20", " ").strip()
     if not plans_to_remove_raw:
         return "No se especificaron planes para remover."
 
