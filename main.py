@@ -40,21 +40,37 @@ def reset_plan():
     
 # Ruta para eliminar un plan específico por nombre
 @app.route("/removeplan")
-def remove_specific_plan():
+def remove_specific_plans():
     global current_plan_index
-    plan_to_remove = request.args.get("plan", "").strip().lower()
 
-    for i, plan in enumerate(plans):
-        if plan.lower() == plan_to_remove:
-            removed_plan = plans.pop(i)
-            # Ajustar el índice actual si es necesario
+    plans_to_remove_raw = request.args.get("plan", "")
+    if not plans_to_remove_raw:
+        return "No se especificaron planes para remover."
+
+    plans_to_remove = [p.strip().lower() for p in plans_to_remove_raw.split(",") if p.strip()]
+    removed_plans = []
+
+    # Iteramos sobre una copia para evitar problemas al modificar la lista mientras iteramos
+    i = 0
+    while i < len(plans):
+        plan_lower = plans[i].lower()
+        if plan_lower in plans_to_remove:
+            removed = plans.pop(i)
+            removed_plans.append(removed)
+            # Ajustar índice actual si es necesario
             if current_plan_index == i:
                 current_plan_index = -1
             elif current_plan_index > i:
                 current_plan_index -= 1
-            return f"Plan removido: {removed_plan}"
-    
-    return f"Plan no existente nephuThink"
+            # No incrementamos i porque la lista se achicó
+        else:
+            i += 1
+
+    if removed_plans:
+        return f"Planes removidos: {', '.join(removed_plans)}"
+    else:
+        return "Plan no existente nephuThink"
+
 
 
 # Ruta para obtener el mensaje de los planes en formato bonito
@@ -73,6 +89,7 @@ def get_plan():
 
     dynamic_part = " ➜ ".join(parts) + " ➜ " if parts else ""
     return f"nephuPats Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls @{user}"
+
 
 @app.route("/addcall", methods=['GET'])
 def add_call():
