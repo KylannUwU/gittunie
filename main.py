@@ -4,51 +4,91 @@ import os
 app = Flask(__name__)
 
 plans = []  # Lista dinámica de planes
+current_plan_index = -1  # Índice del plan actual "En pantalla"
 call_participants = []  # Lista para almacenar los participantes de la llamada (pares de nombre y emote)
 DEFAULT_CALL = {"name": "Solita", "emote": "nephuLurk"}  # Valor predeterminado para la llamada
 
-# Ruta para agregar un plan
 @app.route("/addplan")
 def add_plan():
-    new_plan = request.args.get("plan", "")  # Obtiene el nuevo plan
-    if new_plan:
-        plans.append(new_plan)  # Lo agrega al final de la lista
-    return "Plan añadido."
+    global plans
+    new_plans = request.args.get("plan", "").strip()
+    if new_plans:
+        items = [item.strip() for item in new_plans.split(",") if item.strip()]
+        plans.extend(items)
+    return "Planes añadidos nephuJammies"
 
-# Ruta para remover el último plan
-@app.route("/removeplan")
-def remove_plan():
-    if plans:
-        removed = plans.pop()  # Elimina el último plan
-        return f"Plan removido: {removed}"
-    return "No hay planes para remover."
 
-# Ruta para resetear los planes
+# Ruta para establecer un plan como "En pantalla"
+@app.route("/setplan")
+def set_plan():
+    global current_plan_index
+    plan_to_set = request.args.get("plan", "").strip().lower()
+    for i, plan in enumerate(plans):
+        if plan.lower() == plan_to_set:
+            current_plan_index = i
+            return f"'{plans[i]}' En pantalla nephuo7"
+    return "Plan no encontrado nephuThink"
+
+
+# Ruta para resetear todos los planes
 @app.route("/resetplan")
 def reset_plan():
-    plans.clear()  # Limpia la lista de planes
-    return "Plan reiniciado."
+    global plans, current_plan_index
+    plans.clear()
+    current_plan_index = -1
+    return "Planes reiniciados nephuComfy"
+    
+# Ruta para eliminar un plan específico por nombre
+@app.route("/removeplan")
+def remove_specific_plans():
+    global current_plan_index
 
-# Ruta para obtener los planes y mostrar el formato adecuado
+    plans_to_remove_raw = request.args.get("plan", "")
+    if not plans_to_remove_raw:
+        return "No se especificaron planes para remover."
+
+    plans_to_remove = [p.strip().lower() for p in plans_to_remove_raw.split(",") if p.strip()]
+    removed_plans = []
+
+    # Iteramos sobre una copia para evitar problemas al modificar la lista mientras iteramos
+    i = 0
+    while i < len(plans):
+        plan_lower = plans[i].lower()
+        if plan_lower in plans_to_remove:
+            removed = plans.pop(i)
+            removed_plans.append(removed)
+            # Ajustar índice actual si es necesario
+            if current_plan_index == i:
+                current_plan_index = -1
+            elif current_plan_index > i:
+                current_plan_index -= 1
+            # No incrementamos i porque la lista se achicó
+        else:
+            i += 1
+
+    if removed_plans:
+        return f"Planes removidos: {', '.join(removed_plans)}"
+    else:
+        return "Plan no existente nephuThink"
+
+
+
+# Ruta para obtener el mensaje de los planes en formato bonito
 @app.route("/plan")
 def get_plan():
-    user = request.args.get("user", "alguien")  # Nombre del usuario, por defecto es "alguien"
+    user = request.args.get("user", "alguien")
+    parts = []
 
-    parts = []  # Lista para almacenar las partes del mensaje de los planes
-
-    # Añadir los planes anteriores con la palomita [✓]
-    if len(plans) > 1:
-        for plan in plans[:-1]:  # Excluye el último plan
+    for i, plan in enumerate(plans):
+        if i < current_plan_index:
             parts.append(f"{plan} [✓]")
-    
-    # Añadir el último plan con [En pantalla]
-    if len(plans) > 0:
-        parts.append(f"{plans[-1]} [En pantalla ]")
+        elif i == current_plan_index:
+            parts.append(f"{plan} [En pantalla ]")
+        else:
+            parts.append(plan)
 
-    # Crear la parte dinámica del mensaje
     dynamic_part = " ➜ ".join(parts) + " ➜ " if parts else ""
-    return f" nephuPats Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls  @{user}"
-
+    return f"nephuPats Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls @{user}"
 
 @app.route("/addcall", methods=['GET'])
 def add_call():
