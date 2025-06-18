@@ -40,31 +40,34 @@ def reset_plan():
     
 # Ruta para eliminar un plan específico por nombre
 @app.route("/removeplan")
-def remove_specific_plans():
+def remove_specific_plan():
     global current_plan_index
-
-    plans_to_remove_raw = request.args.get("plan", "").replace("+", " ").replace("%20", " ").strip()
-    if not plans_to_remove_raw:
+    raw_input = request.args.get("plan", "")
+    if not raw_input:
         return "No se especificaron planes para remover."
 
-    plans_to_remove = [p.strip().lower() for p in plans_to_remove_raw.split(",") if p.strip()]
-    removed_plans = []
+    # Divide por coma y limpia espacios extra
+    names_to_remove = [name.strip().lower() for name in raw_input.split(",") if name.strip()]
+    
+    if not names_to_remove:
+        return "No se especificaron planes válidos."
 
-    # Iteramos sobre una copia para evitar problemas al modificar la lista mientras iteramos
-    i = 0
-    while i < len(plans):
-        plan_lower = plans[i].lower()
-        if plan_lower in plans_to_remove:
-            removed = plans.pop(i)
-            removed_plans.append(removed)
-            # Ajustar índice actual si es necesario
+    removed = []
+
+    # Usamos una copia de `plans` para evitar problemas al modificar la lista durante el ciclo
+    new_plans = []
+    for i, plan in enumerate(plans):
+        if plan.lower() in names_to_remove:
+            removed.append(plan)
+            # Ajustar current_plan_index si corresponde
             if current_plan_index == i:
                 current_plan_index = -1
             elif current_plan_index > i:
                 current_plan_index -= 1
-            # No incrementamos i porque la lista se achicó
         else:
-            i += 1
+            new_plans.append(plan)
+
+    plans[:] = new_plans  # Reemplaza la lista original
 
     if removed_plans:
         return f"Planes removidos: {', '.join(removed_plans)}"
