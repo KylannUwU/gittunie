@@ -42,38 +42,19 @@ def reset_plan():
 @app.route("/removeplan")
 def remove_specific_plan():
     global current_plan_index
-    raw_input = request.args.get("plan", "")
-    if not raw_input:
-        return "No se especificaron planes para remover."
+    plan_to_remove = request.args.get("plan", "").strip().lower()
 
-    # Divide por coma y limpia espacios extra
-    names_to_remove = [name.strip().lower() for name in raw_input.split(",") if name.strip()]
-    
-    if not names_to_remove:
-        return "No se especificaron planes válidos."
-
-    removed = []
-
-    # Usamos una copia de `plans` para evitar problemas al modificar la lista durante el ciclo
-    new_plans = []
     for i, plan in enumerate(plans):
-        if plan.lower() in names_to_remove:
-            removed.append(plan)
-            # Ajustar current_plan_index si corresponde
+        if plan.lower() == plan_to_remove:
+            removed_plan = plans.pop(i)
+            # Ajustar el índice actual si es necesario
             if current_plan_index == i:
                 current_plan_index = -1
             elif current_plan_index > i:
                 current_plan_index -= 1
-        else:
-            new_plans.append(plan)
-
-    plans[:] = new_plans  # Reemplaza la lista original
-
-    if removed_plans:
-        return f"Planes removidos: {', '.join(removed_plans)}"
-    else:
-        return "Plan no existente nephuThink"
-
+            return f"Plan removido: {removed_plan}"
+    
+    return f"Plan no existente nephuThink"
 
 
 # Ruta para obtener el mensaje de los planes en formato bonito
