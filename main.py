@@ -131,7 +131,18 @@ def get_plan():
     return f"nephuPats Plan nephuUwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuPls @{user}"
 
 
+@app.route("/addcall", methods=['GET'])
+def add_call():
+    entries = request.args.get("entries", "").split()
+    if len(entries) % 2 != 0:
+        return "Numero incorrecto de elementos, recuerda enviar siempre un Nombre sin espacios y un Emote por participante nephuDerp"
 
+    for i in range(0, len(entries), 2):
+        name = entries[i]
+        emote = entries[i + 1]
+        call_participants.append({"name": name , "emote": emote})
+
+    return f"Participantes añadidos: {' , '.join([f'{name} {emote}' for name, emote in zip(entries[::2], entries[1::2])])}"
 
 
 # Ruta para resetear la llamada
