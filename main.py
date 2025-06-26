@@ -144,6 +144,27 @@ def add_call():
 
     return f"Participantes añadidos: {' , '.join([f'{name} {emote}' for name, emote in zip(entries[::2], entries[1::2])])}"
 
+@app.route("/removecall", methods=['GET'])
+def remove_call():
+    names = request.args.get("entries", "").split()
+    removed = []
+    names = [name.lower() for name in names]
+
+    for name in names:
+        for participant in call_participants[:]:
+            if participant['name'].lower() == name:
+                call_participants.remove(participant)
+                removed.append(f"{participant['name']} {participant['emote']}")
+
+    if not call_participants:
+        return f"{DEFAULT_CALL['name']} {DEFAULT_CALL['emote']}" 
+
+    if removed:
+        return f"Participantes removidos: {' , ' .join(removed)}"
+    else:
+        return "No se encontraron participantes para remover."
+
+
 
 # Ruta para resetear la llamada
 @app.route("/resetcall", methods=['GET'])
