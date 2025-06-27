@@ -18,6 +18,8 @@ def add_plan():
         return "No se recibieron planes."
 
     items = [item.strip() for item in raw_input.split(",") if item.strip()]
+    set_flag = False
+    insert_pos = None
     cleaned_items = []
 
     for item in items:
@@ -43,8 +45,9 @@ def add_plan():
         insert_index = max(0, min(insert_index, len(plans)))
         plans.insert(insert_index, plan)
 
-        # Establecer el plan como activo si viene con -set o si no hay ninguno actualmente
-        if do_set or current_plan_index == -1:
+        if do_set:
+            current_plan_index = insert_index
+        elif set_flag and index == 0:
             current_plan_index = insert_index
 
     return f"Planes añadidos: {', '.join([p[0] for p in cleaned_items])}"
@@ -184,4 +187,3 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
-
