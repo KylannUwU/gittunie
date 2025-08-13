@@ -12,7 +12,7 @@ current_plan_index = -1
 call_participants = []
 
 DEFAULT_CALL = {"name": "Solita", "emote": "nephuLurk"}
-
+DEFAULT_CALL2 = {"name": "Solita", "emote": "nephtunielurk"}
 def save_data():
     with open(DATA_FILE, "w") as f:
         json.dump({
@@ -376,7 +376,7 @@ def reset_call2():
 @app.route("/call2", methods=['GET'])
 def get_call2():
     if not call_participants:
-        return f"{DEFAULT_CALL['name']} {DEFAULT_CALL['emote']}"
+        return f"{DEFAULT_CALL2['name']} {DEFAULT_CALL2['emote']}"
     
     call_info = " ".join([f"{p['name']} {p['emote']}" for p in call_participants])
     return call_info
