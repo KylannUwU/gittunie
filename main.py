@@ -12,7 +12,7 @@ current_plan_index = -1
 call_participants = []
 
 DEFAULT_CALL = {"name": "Solita", "emote": "nephuLurk"}
-DEFAULT_CALL2 = {"name": "Solita", "emote": "nephtunielurk"}
+DEFAULT_CALL2 = {"name": "Solita", "emote": "qq"}
 def save_data():
     with open(DATA_FILE, "w") as f:
         json.dump({
@@ -280,7 +280,7 @@ def remove_specific_plans2():
     if removed_plans:
         return f"Planes removidos: {', '.join(removed_plans)}"
     else:
-        return "Plan no existente nephtuniethink"
+        return "Plan no existente TuniePoP "
 
 @app.route("/setplan2")
 def set_plan2():
@@ -299,7 +299,7 @@ def next_plan2():
     if current_plan_index == -1:
         return "No hay plan en pantalla actualmente."
     elif current_plan_index + 1 >= len(plans):
-        return "Ya estás en el último plan nephtuniethink"
+        return "Ya estás en el último plan TuniePoP "
     else:
         current_plan_index += 1
         save_data()
@@ -311,7 +311,7 @@ def reset_plan2():
     plans.clear()
     current_plan_index = -1
     save_data()
-    return "Planes reiniciados nephuComfy"
+    return "Planes reiniciados TuniePoP "
 
 @app.route("/plan2")
 def get_plan2():
@@ -326,8 +326,8 @@ def get_plan2():
         else:
             parts.append(plan)
 
-    dynamic_part = " ➜ ".join(parts) + " ➜ " if parts else ""
-    return f"nephtuniepat Plan nephtunieuwu  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephtuniesip @{user}"
+    dynamic_part = " ➜ ".join(parts) + " ➜ " if parts else ""  
+    return f"tunieSitt Plan uwutunie  [ Plan de Hoy ] ➜ {dynamic_part}Mucho Más! nephuOh @{user}"
 
 # ---------- Llamada ----------
 
@@ -335,7 +335,7 @@ def get_plan2():
 def add_call2():
     entries = request.args.get("entries", "").split()
     if len(entries) % 2 != 0:
-        return "Numero incorrecto de elementos, recuerda enviar siempre un Nombre sin espacios y un Emote por participante nephtuniederp"
+        return "Numero incorrecto de elementos, recuerda enviar siempre un Nombre sin espacios y un Emote por participante tunieSitt"
 
     for i in range(0, len(entries), 2):
         name = entries[i]
@@ -371,7 +371,7 @@ def remove_call2():
 def reset_call2():
     call_participants.clear()
     save_data()
-    return f"!call reiniciado nephtuniecomfy"
+    return f"!call reiniciado tunieSitt"
 
 @app.route("/call2", methods=['GET'])
 def get_call2():
